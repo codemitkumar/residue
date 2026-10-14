@@ -1,0 +1,90 @@
+{
+  "name": "residue",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "smoke": "npx --yes tsx scripts/smoke.ts",
+    "alibi": "npx --yes tsx scripts/alibi-check.ts",
+    "life": "npx --yes tsx scripts/life-check.ts",
+    "jobs": "npx --yes tsx scripts/job-check.ts",
+    "urge": "npx --yes tsx scripts/urge-check.ts",
+    "world": "npx --yes tsx scripts/world-check.ts",
+    "dealer": "npx --yes tsx scripts/dealer-check.ts",
+    "commute": "npx --yes tsx scripts/commute-check.ts",
+    "patrol": "npx --yes tsx scripts/patrol-check.ts",
+    "roadblock": "npx --yes tsx scripts/roadblock-check.ts",
+    "legal": "npx --yes tsx scripts/legal-check.ts",
+    "frame": "npx --yes tsx scripts/frame-check.ts",
+    "family": "npx --yes tsx scripts/family-check.ts",
+    "desktop": "npm run build && electron .",
+    "desktop:dev": "node scripts/desktop-dev.cjs",
+    "dist": "npm run build && electron-builder --win nsis",
+    "unlock-machine": "electron . --unlock-machine",
+    "spree": "npx --yes tsx scripts/spree-check.ts",
+    "killtime": "npx --yes tsx scripts/killtime-check.ts"
+  },
+  "dependencies": {
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@fontsource/oswald": "^5.3.0",
+    "@fontsource/special-elite": "^5.3.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "electron": "^44.5.1",
+    "electron-builder": "^26.15.3",
+    "oxlint": "^1.81.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.0"
+  },
+  "main": "electron/main.cjs",
+  "description": "Residue — a one-life crime simulation.",
+  "author": "Residue",
+  "build": {
+    "appId": "game.residue.desktop",
+    "productName": "Residue",
+    "copyright": "Residue",
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "asar": true,
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Residue",
+      "deleteAppDataOnUninstall": false,
+      "artifactName": "Residue-Setup-${version}.${ext}",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico"
+    }
+  }
+}

@@ -1,0 +1,115 @@
+/* Agenda, 24h timeline, calendar, job board, shop basket. */
+
+.agenda { list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.agenda li { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--border); border-left: 3px solid var(--amber); border-radius: 3px; background: rgba(0, 0, 0, 0.2); }
+.agenda li.kill { border-left-color: var(--red); }
+
+.timeline24 { display: grid; grid-template-columns: 80px 1fr; gap: 6px 10px; align-items: center; margin-bottom: 6px; }
+.lane-label { font-family: var(--display); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.lane { position: relative; height: 26px; background: #0c0d10; border: 1px solid var(--border); border-radius: 2px; overflow: hidden; }
+.lane-empty { position: absolute; left: 8px; top: 4px; font-size: 11px; color: var(--muted); font-family: var(--type); }
+.seg { position: absolute; top: 2px; bottom: 2px; border-radius: 2px; font-size: 11px; padding: 2px 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #111; font-weight: 600; }
+.seg.work { background: #8aa4c8; }
+.seg.work.sick { background: repeating-linear-gradient(45deg, #5a6a80, #5a6a80 4px, #47546a 4px, #47546a 8px); color: #ddd; }
+.seg.act { background: var(--amber); }
+.seg.kill { background: var(--red); color: #fff; }
+.seg.clash { outline: 2px solid #fff; animation: blink 1.2s infinite; }
+.ticks { position: relative; height: 14px; }
+.ticks span { position: absolute; transform: translateX(-50%); font-family: var(--mono); font-size: 10px; color: var(--muted); }
+.ticks span:first-child { transform: none; }
+.ticks span:last-child { transform: translateX(-100%); }
+
+.cal { display: grid; grid-template-columns: 52px repeat(7, minmax(0, 1fr)); gap: 0; border: 1px solid var(--border); border-radius: 3px; overflow: hidden; background: #0c0d10; }
+.cal-head { height: 38px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: var(--display); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; border-bottom: 1px solid var(--border); background: #13151a; }
+.cal-head span { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0; text-transform: none; }
+.cal-hours .cal-hour { font-family: var(--mono); font-size: 10px; color: var(--muted); padding-right: 6px; text-align: right; line-height: 1; }
+.cal-day { border-left: 1px solid var(--border); min-width: 0; }
+.cal-day.today .cal-head { color: var(--amber); }
+.cal-body { position: relative; }
+.cal-line { position: absolute; left: 0; right: 0; border-top: 1px dashed #1c1f25; }
+.cal-block { position: absolute; left: 3px; right: 3px; border-radius: 3px; font-size: 10px; padding: 2px 4px; overflow: hidden; cursor: pointer; line-height: 1.2; color: #111; font-weight: 600; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4); }
+.cal-block span { display: block; overflow: hidden; text-overflow: ellipsis; }
+.cal-block.work { background: #8aa4c8; cursor: default; }
+.cal-block.sick { background: #4a5568; color: #ddd; cursor: default; }
+.cal-block.life { background: #b48ce6; }
+.cal-block.job { background: var(--blue); }
+.cal-block.plan { background: var(--amber); }
+.cal-block.kill { background: var(--red); color: #fff; }
+.cal-block.sel { outline: 2px solid #fff; z-index: 2; }
+.cal-now { position: absolute; left: 0; right: 0; height: 2px; background: var(--red); box-shadow: 0 0 6px var(--red); z-index: 3; }
+.cl { width: 12px; height: 12px; border-radius: 2px; display: inline-block; }
+.cl.work { background: #8aa4c8; }
+.cl.life { background: #b48ce6; }
+.cl.job { background: var(--blue); }
+.cl.plan { background: var(--amber); }
+.cl.kill { background: var(--red); }
+
+.jobs { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+.job-card { background: linear-gradient(180deg, #e3dac4, #d4c9ae); color: #1d1a14; border-radius: 3px; padding: 14px; display: flex; flex-direction: column; gap: 4px; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4); transform: rotate(-0.4deg); }
+.job-card:nth-child(even) { transform: rotate(0.5deg); }
+.job-card .muted { color: #6b6250; }
+.job-title { font-family: Georgia, serif; font-weight: 700; font-size: 17px; }
+.job-pay { font-family: var(--display); font-size: 24px; color: #234d2c; }
+.job-pay span { font-size: 12px; color: #6b6250; }
+.job-card button { margin-top: 8px; }
+.job-card button.ghost { color: #555; border-color: #b8ab8b; }
+
+.basket { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--border); display: flex; flex-direction: column; gap: 8px; }
+.basket .row:first-child { flex-wrap: wrap; }
+.chip-item { display: inline-block; margin: 0 4px 4px 0; padding: 2px 8px; border-radius: 999px; background: var(--panel-2); border: 1px solid var(--border); font-size: 12px; cursor: pointer; }
+.chip-item:hover { border-color: var(--red); color: #ffb3b5; }
+
+@media (max-width: 900px) {
+  .cal { grid-template-columns: 40px repeat(7, minmax(0, 1fr)); }
+  .cal-block span { display: none; }
+}
+
+/* ---------- money, black market, weather ---------- */
+.bank-balance { display: flex; flex-direction: column; margin-bottom: 12px; }
+.big-num { font-family: var(--mono); font-size: 34px; font-weight: 600; }
+.bm-card { background: linear-gradient(160deg, #141014, #0b090b); border: 1px solid #3b1d22; border-radius: 3px; padding: 14px; display: flex; flex-direction: column; gap: 8px; box-shadow: inset 0 0 30px rgba(224, 56, 62, 0.06); }
+.bm-name { font-family: var(--display); font-size: 16px; letter-spacing: 0.08em; text-transform: uppercase; color: #f1d7d8; }
+.bm-desc { font-family: var(--type); font-size: 13px; color: #a99; }
+.bm-price { font-family: var(--mono); font-size: 20px; color: var(--green); }
+.hud-weather { font-family: var(--mono); font-size: 15px; display: flex; align-items: center; gap: 8px; }
+.hud-event { font-family: var(--display); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; background: var(--amber); color: #111; padding: 1px 6px; border-radius: 2px; }
+.cal-event { font-size: 9px; padding: 1px 4px; background: #c9b98f; color: #2b2416; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--display); letter-spacing: 0.05em; text-transform: uppercase; }
+.cal-event.holiday { background: var(--green); color: #fff; }
+.cal-event.masks, .cal-event.fireworks { background: var(--red); color: #fff; }
+
+.weather-fx { position: fixed; inset: 0; pointer-events: none; z-index: 3; opacity: 0; transition: opacity 3s; }
+.wx-rain .weather-fx, .wx-storm .weather-fx {
+  opacity: 1;
+  background-image: repeating-linear-gradient(105deg, transparent 0 18px, rgba(170, 200, 255, 0.07) 18px 19px);
+  background-size: 200px 200px; animation: rain 0.45s linear infinite;
+}
+.wx-storm .weather-fx { animation: rain 0.3s linear infinite, lightning 9s infinite; }
+@keyframes rain { to { background-position: -40px 200px; } }
+@keyframes lightning { 0%, 96%, 100% { background-color: transparent; } 97% { background-color: rgba(220, 230, 255, 0.12); } 98% { background-color: transparent; } 98.5% { background-color: rgba(220, 230, 255, 0.08); } }
+.wx-snow .weather-fx {
+  opacity: 0.8;
+  background-image: radial-gradient(2px 2px at 20px 30px, #fff, transparent), radial-gradient(2px 2px at 120px 80px, #fff, transparent), radial-gradient(1.5px 1.5px at 60px 150px, #fff, transparent), radial-gradient(2px 2px at 170px 10px, #fff, transparent);
+  background-size: 200px 200px; animation: snow 9s linear infinite;
+}
+@keyframes snow { to { background-position: 40px 400px, -30px 400px, 20px 400px, -10px 400px; } }
+.wx-fog .weather-fx { opacity: 1; background: linear-gradient(180deg, rgba(180, 190, 200, 0.06), rgba(180, 190, 200, 0.16)); backdrop-filter: blur(0.6px); }
+.wx-heat .weather-fx { opacity: 1; background: radial-gradient(ellipse at top, rgba(255, 140, 40, 0.08), transparent 70%); }
+@media (prefers-reduced-motion: reduce) { .weather-fx { animation: none !important; } }
+
+.meter.good span.on, .meter.good span.on.warm, .meter.good span.on.hot { background: var(--green); box-shadow: 0 0 6px rgba(76, 194, 106, 0.5); }
+
+.live { font-family: var(--display); font-size: 11px; letter-spacing: 0.16em; color: var(--red); animation: blink 2s infinite; padding: 4px 6px; }
+
+.gender { font-size: 11px; opacity: 0.75; margin-left: 2px; }
+.gender.male { color: #8ab4f8; }
+.gender.female { color: #f28bb6; }
+.gender.nonbinary { color: #c9a7ff; }
+
+.the-end { font-family: var(--type); font-size: 16px; color: var(--paper); text-align: center; margin-top: 10px; }
+
+.commute { display: flex; flex-direction: column; gap: 4px; }
+.commute-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 6px; }
+.commute-grid div { display: flex; flex-direction: column; padding: 6px 8px; background: rgba(0, 0, 0, 0.25); border: 1px solid var(--border); border-radius: 2px; }
+.commute-grid span { font-family: var(--display); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.commute-grid b { font-family: var(--mono); font-size: 15px; }
+.job-card .commute-line { color: #4a4232; }

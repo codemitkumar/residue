@@ -1,0 +1,82 @@
+/* The urge: the interface itself starts to come apart. */
+
+.urge-stat .meter span.on { background: #b3262c; box-shadow: 0 0 6px rgba(224, 56, 62, 0.6); }
+.urge-stat .hud-label { color: #e9777b; }
+.surrender { color: var(--amber) !important; }
+
+.urge-overlay { position: fixed; inset: 0; pointer-events: none; z-index: 45; overflow: hidden; }
+.urge-vignette {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, transparent 45%, rgba(120, 0, 8, 0.55) 100%);
+  animation: urge-pulse 2.4s ease-in-out infinite;
+}
+@keyframes urge-pulse { 50% { filter: brightness(1.6); } }
+.urge-word {
+  position: absolute; font-family: var(--display); font-weight: 700; letter-spacing: 0.2em; color: rgba(255, 40, 50, 0.85);
+  text-shadow: 3px 0 rgba(0, 255, 255, 0.5), -3px 0 rgba(255, 0, 60, 0.7); mix-blend-mode: screen;
+  animation: urge-word 0.6s steps(3) forwards; white-space: nowrap;
+}
+@keyframes urge-word {
+  0% { opacity: 0; transform: translate(-4px, 2px) skewX(10deg); }
+  30% { opacity: 1; transform: translate(3px, -1px) skewX(-6deg); }
+  100% { opacity: 0; transform: translate(0, 0) skewX(0); filter: blur(2px); }
+}
+
+/* Level 1: restless — an occasional twitch. */
+.urge-1 .content { animation: twitch 7s infinite; }
+.urge-1 .hud-time { text-shadow: 1px 0 rgba(255, 0, 60, 0.6), -1px 0 rgba(0, 255, 255, 0.4); }
+@keyframes twitch {
+  0%, 96%, 100% { transform: none; filter: none; }
+  97% { transform: translateX(-3px); filter: hue-rotate(-20deg); }
+  98% { transform: translateX(2px) skewX(-1deg); }
+}
+
+/* Level 2: can't sleep — colour split and tearing. */
+.urge-2 .content { animation: tear 3.5s infinite; }
+.urge-2 .panel { text-shadow: 1px 0 rgba(255, 0, 60, 0.35), -1px 0 rgba(0, 255, 255, 0.25); }
+.urge-2 .sidenav { animation: twitch 5s infinite reverse; }
+.urge-2 .fx { background: radial-gradient(ellipse at center, transparent 45%, rgba(40, 0, 0, 0.7) 100%), repeating-linear-gradient(0deg, rgba(255, 0, 40, 0.04) 0 1px, transparent 1px 3px); }
+@keyframes tear {
+  0%, 88%, 100% { transform: none; clip-path: none; filter: none; }
+  89% { transform: translateX(-6px); clip-path: inset(10% 0 60% 0); filter: saturate(2) hue-rotate(-25deg); }
+  91% { transform: translateX(5px); clip-path: inset(50% 0 20% 0); }
+  93% { transform: translateX(-2px) skewX(2deg); clip-path: none; filter: contrast(1.4); }
+}
+
+/* Level 3: it's coming — the whole screen shakes and bleeds. */
+.urge-3 .hud, .urge-3 .sidenav { animation: shake 2.2s infinite; }
+.urge-3 .content { animation: tear 1.6s infinite; }
+.urge-3 .panel, .urge-3 .hud { text-shadow: 2px 0 rgba(255, 0, 60, 0.55), -2px 0 rgba(0, 255, 255, 0.4); }
+.urge-3 .hud { border-bottom-color: var(--red); box-shadow: 0 0 30px rgba(224, 56, 62, 0.35); }
+.urge-3::after {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 44;
+  background: repeating-linear-gradient(180deg, rgba(255, 0, 40, 0.06) 0 2px, transparent 2px 7px);
+  animation: roll 0.9s linear infinite;
+}
+@keyframes shake {
+  0%, 82%, 100% { transform: none; }
+  84% { transform: translate(-4px, 2px) rotate(-0.3deg); }
+  86% { transform: translate(5px, -3px) rotate(0.4deg); }
+  88% { transform: translate(-2px, 1px); }
+  90% { transform: translate(3px, 2px) rotate(-0.2deg); }
+}
+@keyframes roll { to { background-position: 0 14px; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .urge-1 .content, .urge-2 .content, .urge-3 .content, .urge-2 .sidenav, .urge-3, .urge-3::after, .urge-word, .urge-vignette { animation: none !important; }
+}
+
+/* ---------- police encounter ---------- */
+.encounter { position: fixed; inset: 0; z-index: 70; display: grid; place-items: center; padding: 16px; background: rgba(0, 0, 0, 0.82); }
+.encounter-lights { position: absolute; inset: 0; animation: lights 0.9s infinite; mix-blend-mode: screen; pointer-events: none; }
+@keyframes lights {
+  0%, 49% { background: radial-gradient(circle at 15% 20%, rgba(224, 40, 50, 0.45), transparent 45%); }
+  50%, 100% { background: radial-gradient(circle at 85% 20%, rgba(40, 90, 255, 0.45), transparent 45%); }
+}
+.encounter-card { position: relative; width: 460px; max-width: 100%; background: #0d0e12; border: 2px solid var(--red); border-radius: 6px; padding: 26px; text-align: center; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 0 60px rgba(224, 56, 62, 0.4); }
+.encounter-title { font-family: var(--display); font-size: 46px; font-weight: 700; letter-spacing: 0.3em; color: var(--red); animation: blink 0.8s infinite; }
+.encounter-timer { font-size: 48px; color: #fff; }
+.encounter-buttons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.lawyers { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
+.lawyer { display: flex; flex-direction: column; gap: 4px; padding: 10px; border: 1px solid var(--border); border-radius: 3px; background: rgba(0, 0, 0, 0.25); }
+.lawyer.on { border-color: var(--green); }
